@@ -5,33 +5,48 @@
 
 #include <stdio.h>
 #include "DD.h"
-#define SECT_SIZE 16
 
+void strcpy(char* A, char* B)
+{
+	while(*B)
+		*(A++) = *(B++); 
+}
 
 void ProbeHD(char* Name)
 {
-	NewHD = fopen(Name, "r+b");
+	int i = 0 ;
+	strcpy(OurHD.Name, Name);
 }
 
 void MakeHD(char* Name, unsigned NSects)
 {
-	NewHD = fopen(Name, "wb+");
-	int i = 0 ;
+	strcpy(OurHD.Name, Name);
+	OurHD.Handle = fopen(Name, "wb+");
 	Sector Datum ;
+	int i = 0 ;
+	while(i < SECT_SIZE)
+		Datum.data[i++] = 0 ;
+	i = 0;
 	while(i++ < NSects)
-		fwrite(&Datum, sizeof(Sector), 1, NewHD);
+		fwrite(&Datum, sizeof(Sector), 1, OurHD.Handle);
+
+	fclose(OurHD.Handle);
 }
 
 void WriteSector(int SectIndex, void* Data )
 {
-	fseek (NewHD, SectIndex * SECT_SIZE, SEEK_SET);
-	fwrite(Data, SECT_SIZE, 1,NewHD);
+	OurHD.Handle = fopen(OurHD.Name, "r+");
+	fseek (OurHD.Handle, SectIndex * SECT_SIZE, SEEK_SET);
+	fwrite(Data, SECT_SIZE, 1,OurHD.Handle);
+	fclose(OurHD.Handle);
 }
 
 void ReadSector(int SectIndex, void* Data)
 {
-	fseek (NewHD, SectIndex * SECT_SIZE, SEEK_SET);
-	fread(Data, SECT_SIZE, 1,NewHD);
+	OurHD.Handle = fopen(OurHD.Name, "r+");
+	fseek (OurHD.Handle, SectIndex * SECT_SIZE, SEEK_SET);
+	fread(Data, SECT_SIZE, 1,OurHD.Handle);
+	fclose(OurHD.Handle);
 }
 
 void DisplayData(void* Data)
