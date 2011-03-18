@@ -1,13 +1,14 @@
 #include "TOS.h"
+#include "DD.h"
+
 void InitTOS()
 {
 	int i ;
-	for(i = 0 ;  i < TAILLE_DD; i++)
+	for(i = 0 ;  i < OurHD.Size; i++)
 		TOS[i] = LIBRE;
 }
 
-
-int ChercheSecteurVideTOS()
+int ChercherSecteurVideTOS()
 {
 	int i = 0 ;
 	while(TOS[i++] == OCCUPE);
@@ -15,38 +16,38 @@ int ChercheSecteurVideTOS()
 	return i - 1 ;
 }
 
-
 int EspaceVide()
 {
 	int i = 0, EspaceV = 0 ;
-	for(; i < TAILLE_DD; i++ )
+	for(; i < OurHD.Size; i++ )
 		if ( TOS[i] == LIBRE) EspaceV++;
 		
 	return EspaceV;
 }
 
-int OccuperSecteur(int Indice)
+bool OccuperSecteur(int Indice)
 {
-	if (Indice >= TAILLE_DD)
+	if (Indice >= OurHD.Size)
 		return ECHEC;
 	else
 		TOS[Indice] = OCCUPE;
 }
 
-int LibererSecteur(int Indice)
+bool LibererSecteur(int Indice)
 {
-	if (Indice >= TAILLE_DD)
+	if (Indice >= OurHD.Size)
 		return ECHEC;
 	else
 		TOS[Indice] = LIBRE;
 }
 
-bool SauvegarderTOS()
-{
-	EcrireSecteur(void* Enregistrement)
-}
-
 bool ChargerTOS()
 {
+	return ReadSector(OurHD.Size - 1, &TOS);
+}
+
+bool SauvegarderTOS()
+{
+	return WriteSector(OurHD.Size - 1, &TOS);
 }
 

@@ -1,14 +1,13 @@
 #include "types.h"
+#include "DD.h"
 #define OCCUPE 0
 #define LIBRE 1
-#define TAILLE_DD 50
-#define EMPLACEMENT_TOS 2
 
-char TOS[TAILLE_DD];
+unsigned char TOS[SECT_SIZE];
 
 void InitTOS();
 
-int ChercheSecteurVideTOS();
+int ChercherSecteurVideTOS();
 
 int EspaceVide();
 
@@ -19,3 +18,7 @@ bool LibererSecteur(int Indice);
 bool SauvegarderTOS();
 
 bool ChargerTOS();
+
+int ValeurBitTOS(int Indice);
+
+void ActiverBitTOS(int Indice);
